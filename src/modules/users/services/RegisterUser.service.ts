@@ -15,7 +15,7 @@ class RegisterUserService {
 
   async exec({ name, email, password }: IRegisterUser): Promise<IResponse> {
     const emailExist = await this.UserRepository.findByEmail(email);
-    if (emailExist) return ApiResponse.AlreadyExist("Email is already exists.");
+    if (emailExist) return ApiResponse.AlreadyExist("Email already exists.");
     const user: IUser = await this.UserRepository.register({
       name,
       email,
