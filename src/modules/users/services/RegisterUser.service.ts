@@ -3,6 +3,9 @@ import { IUserRepository } from "../domain/repositories/IUserRepository";
 import { IRegisterUser } from "../domain/models/IRegisterUser";
 import { IUser } from "../domain/models/IUser";
 import AppError from "../../../shared/errors/AppError";
+import ApiResponse from "../../../shared/utils/ApiResponse";
+import User from "../infrastructure/database/models/user.model";
+import { IResponse } from "../../../shared/types/IResponse";
 
 @injectable()
 class RegisterUserService {
@@ -10,15 +13,15 @@ class RegisterUserService {
     @inject("UserRepository") private readonly UserRepository: IUserRepository
   ) {}
 
-  async exec({ name, email, password }: IRegisterUser): Promise<IUser> {
+  async exec({ name, email, password }: IRegisterUser): Promise<IResponse> {
     const emailExist = await this.UserRepository.findByEmail(email);
-    if (emailExist) throw new AppError("This email already registered", 409);
+    if (emailExist) return ApiResponse.AlreadyExist("Email already exists.");
     const user: IUser = await this.UserRepository.register({
       name,
       email,
       password,
     });
-    return user;
+    return ApiResponse.Created({ user });
   }
 }
 export default RegisterUserService;
