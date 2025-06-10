@@ -1,4 +1,6 @@
+import { DeleteResult } from "mongoose";
 import ApiFeatures from "../../../../../shared/utils/ApiFeatures";
+import ApiResponse from "../../../../../shared/utils/ApiResponse";
 import { IFindUsers } from "../../../domain/models/IFindUsers";
 import { ILoginUser } from "../../../domain/models/ILoginUser";
 import { IRegisterUser } from "../../../domain/models/IRegisterUser";
@@ -7,6 +9,10 @@ import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import User from "../models/user.model";
 
 class UserRepository implements IUserRepository {
+  async delete(id: string): Promise<IUser | null> {
+    const user: IUser | null = await User.findByIdAndDelete(id);
+    return user;
+  }
   async findOne(id: string): Promise<IUser | null> {
     const user: IUser | null = await User.findById(id);
     return user;

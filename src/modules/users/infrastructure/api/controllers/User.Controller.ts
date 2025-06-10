@@ -5,6 +5,7 @@ import asyncHandler from "../../../../../shared/utils/asyncHandler";
 import ApiResponse from "../../../../../shared/utils/ApiResponse";
 import { IResponse } from "../../../../../shared/types/IResponse";
 import FindUserService from "../../../services/FindUsers.Service";
+import DeleteUserService from "../../../services/DeleteUser.Service";
 
 @injectable()
 export default class UserController {
@@ -26,6 +27,14 @@ export default class UserController {
       const findUsers = container.resolve(FindUserService);
       const response: IResponse = await findUsers.exec(req.query);
       return ApiResponse.send(response, res);
+    }
+  );
+
+  public delete = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const deleteUser = container.resolve(DeleteUserService);
+      const response: IResponse = await deleteUser.exec(req.params.id);
+      ApiResponse.send(response, res);
     }
   );
 }
