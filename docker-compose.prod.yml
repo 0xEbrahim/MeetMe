@@ -4,5 +4,5 @@ services:
       context: .
       target: production
     environment:
-      - NOPE_ENV=production
+      - NODE_ENV=production
     command: npm run start
