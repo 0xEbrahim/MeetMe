@@ -11,7 +11,6 @@ class DeleteUserService {
   async exec(id: string) {
     const user = await this.UserRepository.findOne(id);
     if (!user) return ApiResponse.NotFound(`User with id: ${id} not found.`);
-    console.log(user);
     const result = await this.UserRepository.delete(id);
     return ApiResponse.OK({ result });
   }
