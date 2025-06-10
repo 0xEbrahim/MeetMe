@@ -1,4 +1,4 @@
-import path from "path";
+
 import dotenv from "dotenv";
 import env from "env-var";
 
@@ -16,4 +16,5 @@ export default {
   ME_PASSWORD: env.get("ME_CONFIG_MONGODB_ADMINPASSWORD").required().asString(),
   ME_URI: env.get("ME_CONFIG_MONGODB_URL").required().asString(),
   ME_AUTH: env.get("ME_CONFIG_BASICAUTH").required().asBool(),
+  LOCAL_DB_URI: env.get("LOCAL_DB_URI").required().asString(),
 };
