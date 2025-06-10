@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon -L",
     "build": "tsc",
-    "start": "node ./dist/server.js"
+    "start": "node ./dist/infrastructure/api/server.js"
   },
   "keywords": [],
   "author": "",
