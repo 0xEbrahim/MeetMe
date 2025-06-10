@@ -1,0 +1,8 @@
+services:
+  web:
+    build:
+      context: .
+      target: production
+    environment:
+      - NOPE_ENV=production
+    command: npm run start
