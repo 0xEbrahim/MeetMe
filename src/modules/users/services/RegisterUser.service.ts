@@ -21,7 +21,7 @@ class RegisterUserService {
       email,
       password,
     });
-    return ApiResponse.Created({ User });
+    return ApiResponse.Created({ user });
   }
 }
 export default RegisterUserService;
