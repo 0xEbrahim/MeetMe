@@ -2,8 +2,7 @@ import { injectable } from "tsyringe";
 import AppError from "../errors/AppError";
 import { IResponse, ResponseMetadata } from "../types/IResponse";
 import { Response } from "express";
-import { token } from "morgan";
-type reponse = {};
+import { STATUS } from "../constant/responseStatus";
 
 class ApiResponse<T> {
   static format = <T extends object | undefined>(
@@ -13,7 +12,7 @@ class ApiResponse<T> {
     metadata?: ResponseMetadata
   ) => {
     const response: IResponse = {
-      status: "Success",
+      status: STATUS.SUCCESS,
       statusCode: statusCode,
       message: message || "Operation completed successfully",
     };

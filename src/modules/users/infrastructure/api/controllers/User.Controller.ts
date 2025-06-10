@@ -4,6 +4,7 @@ import RegisterUserService from "../../../services/RegisterUser.service";
 import asyncHandler from "../../../../../shared/utils/asyncHandler";
 import ApiResponse from "../../../../../shared/utils/ApiResponse";
 import { IResponse } from "../../../../../shared/types/IResponse";
+import FindUserService from "../../../services/FindUsers.Service";
 
 @injectable()
 export default class UserController {
@@ -17,6 +18,14 @@ export default class UserController {
         password,
       });
       ApiResponse.send(response, res);
+    }
+  );
+
+  public find = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const findUsers = container.resolve(FindUserService);
+      const response: IResponse = await findUsers.exec(req.query);
+      return ApiResponse.send(response, res);
     }
   );
 }

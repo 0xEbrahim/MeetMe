@@ -1,3 +1,5 @@
+import ApiFeatures from "../../../../../shared/utils/ApiFeatures";
+import { IFindUsers } from "../../../domain/models/IFindUsers";
 import { ILoginUser } from "../../../domain/models/ILoginUser";
 import { IRegisterUser } from "../../../domain/models/IRegisterUser";
 import { IUser } from "../../../domain/models/IUser";
@@ -9,8 +11,14 @@ class UserRepository implements IUserRepository {
     const user: IUser | null = await User.findById(id);
     return user;
   }
-  find(): Promise<IUser[]> {
-    throw new Error("Method not implemented.");
+  async find(data: IFindUsers): Promise<IUser[]> {
+    const query = new ApiFeatures(User.find({}), data)
+      .filter()
+      .limit()
+      .paginate()
+      .sort();
+    const users = await query.exec();
+    return users;
   }
   async findByEmail(email: string): Promise<boolean> {
     const user = await User.findOne({ email: email });

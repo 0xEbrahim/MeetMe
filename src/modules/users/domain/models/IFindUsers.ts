@@ -3,4 +3,5 @@ export interface IFindUsers {
   limit?: number;
   sort?: string;
   limitFields?: string;
+  [key: string]: any;
 }
