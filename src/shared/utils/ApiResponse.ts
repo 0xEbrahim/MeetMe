@@ -1,6 +1,8 @@
 import { injectable } from "tsyringe";
 import AppError from "../errors/AppError";
 import { IResponse, ResponseMetadata } from "../types/IResponse";
+import { Response } from "express";
+import { token } from "morgan";
 type reponse = {};
 
 class ApiResponse<T> {
@@ -47,6 +49,16 @@ class ApiResponse<T> {
     return this.format(data, message, 200, metadata);
   };
 
+  static send = (response: IResponse, res: Response) => {
+    res.status(response.statusCode).json({
+      status: response.status,
+      message: response.message,
+      data: response.data,
+      token: response.token,
+      size: response.size,
+    });
+  };
+
   // Errors
   static NotFound = (message: string) => {
     throw new AppError(message, 404);
@@ -64,3 +76,5 @@ class ApiResponse<T> {
     throw new AppError(message, 409);
   };
 }
+
+export default ApiResponse;
