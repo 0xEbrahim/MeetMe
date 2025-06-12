@@ -3,9 +3,9 @@ import env from "env-var";
 
 dotenv.config();
 const prod = `redis://${env.get("REDIS_PROD_HOST").required().asString()}:${env
-  .get("REDIS_PROD_HOST")
+  .get("REDIS_PROD_PORT")
   .required()
-  .asString()}`;
+  .asPortNumber()}`;
 const dev = env.get("REDIS_DEV_HOST").required().asString();
 const redisHost =
   env.get("NODE_ENV").required().asString() === "development" ? dev : prod;
