@@ -1,20 +1,32 @@
 import { container, inject, injectable } from "tsyringe";
-import { IUserRepository } from "../domain/repositories/IUserRepository";
-import { IRegisterUser } from "../domain/models/IRegisterUser";
-import { IUser } from "../domain/models/IUser";
 import ApiResponse from "../../../shared/utils/ApiResponse";
+import { IRegisterUser } from "../domain/models/IRegisterUser";
 import { IResponse } from "../../../shared/types/IResponse";
+import { IUser } from "../domain/models/IUser";
 import SendEmailService from "../../../infrastructure/email/services/SendEmail.Service";
 import { IEmail } from "../../../infrastructure/email/models/models";
-import env from "../../../shared/constant/env";
+import { env } from "process";
+import { IFindUsers } from "../domain/models/IFindUsers";
+import { IUserRepository } from "../domain/repositories/IUserRepository";
 
 @injectable()
-class RegisterUserService {
+class UserService {
   constructor(
     @inject("UserRepository") private readonly UserRepository: IUserRepository
   ) {}
 
-  async exec({ name, email, password }: IRegisterUser): Promise<IResponse> {
+  async deleteUser(id: string) {
+    const user = await this.UserRepository.findOne(id);
+    if (!user) return ApiResponse.NotFound(`User with id: ${id} not found.`);
+    const result = await this.UserRepository.delete(id);
+    return ApiResponse.OK({ result });
+  }
+
+  async registerUser({
+    name,
+    email,
+    password,
+  }: IRegisterUser): Promise<IResponse> {
     const emailExist = await this.UserRepository.findByEmail(email);
     if (emailExist) return ApiResponse.AlreadyExist("Email already exists.");
     const user: IUser = await this.UserRepository.register({
@@ -36,5 +48,11 @@ class RegisterUserService {
     await SendEmail.exec(emailData);
     return ApiResponse.Created({ user });
   }
+
+  async findUsers(data: IFindUsers) {
+    const users = await this.UserRepository.find(data);
+    return ApiResponse.OK({ users });
+  }
 }
-export default RegisterUserService;
+
+export default UserService;

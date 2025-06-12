@@ -17,6 +17,10 @@ class RedisRepository implements IRedisRepository {
   async delete(key: string): Promise<void> {
     await this.redis.del(key);
   }
+
+  async keys(key: string): Promise<string[]> {
+    return await this.redis.keys(key);
+  }
 }
 
 export default RedisRepository;
