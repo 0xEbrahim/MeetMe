@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import morgan from "morgan";
 import cors from "cors";
 import env from "../../shared/constant/env";
@@ -7,6 +8,8 @@ import "../../shared/container/index";
 import errorHandler from "../../shared/errors/errorHandler";
 const app = express();
 
+app.set("views", path.join(__dirname, "../../views"));
+app.set("view engine", "ejs");
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(env.NODE_ENV === "development" ? "dev" : "combined"));

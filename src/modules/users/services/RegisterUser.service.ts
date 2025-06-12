@@ -1,11 +1,12 @@
-import { inject, injectable } from "tsyringe";
+import { container, inject, injectable } from "tsyringe";
 import { IUserRepository } from "../domain/repositories/IUserRepository";
 import { IRegisterUser } from "../domain/models/IRegisterUser";
 import { IUser } from "../domain/models/IUser";
-import AppError from "../../../shared/errors/AppError";
 import ApiResponse from "../../../shared/utils/ApiResponse";
-import User from "../infrastructure/database/models/user.model";
 import { IResponse } from "../../../shared/types/IResponse";
+import SendEmailService from "../../../infrastructure/email/services/SendEmail.Service";
+import { IEmail } from "../../../infrastructure/email/models/models";
+import env from "../../../shared/constant/env";
 
 @injectable()
 class RegisterUserService {
@@ -21,6 +22,18 @@ class RegisterUserService {
       email,
       password,
     });
+    const SendEmail = container.resolve(SendEmailService);
+    const emailData: IEmail = {
+      to: user.email,
+      subject: "Welcome to Our App!",
+      template: "welcome-email",
+      info: {
+        username: user.name,
+        appName: "MeetMe app",
+        appUrl: env.DEV_URL,
+      },
+    };
+    await SendEmail.exec(emailData);
     return ApiResponse.Created({ user });
   }
 }
