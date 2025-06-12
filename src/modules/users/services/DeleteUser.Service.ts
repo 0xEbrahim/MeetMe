@@ -2,6 +2,13 @@ import { inject, injectable } from "tsyringe";
 import UserRepository from "../infrastructure/database/repositories/UserRepository";
 import ApiResponse from "../../../shared/utils/ApiResponse";
 
+/**
+ * TODO:
+ *  - Redis integration
+ *  - Email Integration
+ *  - Unit & Integration testing
+ */
+
 @injectable()
 class DeleteUserService {
   constructor(
