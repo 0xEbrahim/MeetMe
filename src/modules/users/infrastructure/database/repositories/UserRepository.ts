@@ -7,6 +7,9 @@ import { IRegisterUser } from "../../../domain/models/IRegisterUser";
 import { IUser } from "../../../domain/models/IUser";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import User from "../models/user.model";
+import { container } from "tsyringe";
+import GetCacheService from "../../../../../infrastructure/redis/Services/GetCache.Service";
+import SetCacheService from "../../../../../infrastructure/redis/Services/SetCache.Service";
 
 class UserRepository implements IUserRepository {
   async delete(id: string): Promise<IUser | null> {
@@ -18,12 +21,20 @@ class UserRepository implements IUserRepository {
     return user;
   }
   async find(data: IFindUsers): Promise<IUser[]> {
+    const GetCache = container.resolve(GetCacheService);
+    const cachedData = await GetCache.exec("users", data);
+    if (cachedData) {
+      const dataObj = JSON.parse(cachedData);
+      return dataObj;
+    }
     const query = new ApiFeatures(User.find({}), data)
       .filter()
       .limit()
       .paginate()
       .sort();
     const users = await query.exec();
+    const SetCache = container.resolve(SetCacheService);
+    await SetCache.exec("users", data, users);
     return users;
   }
   async findByEmail(email: string): Promise<boolean> {

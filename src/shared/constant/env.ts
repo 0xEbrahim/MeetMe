@@ -2,6 +2,13 @@ import dotenv from "dotenv";
 import env from "env-var";
 
 dotenv.config();
+const prod = `redis://${env.get("REDIS_PROD_HOST").required().asString()}:${env
+  .get("REDIS_PROD_HOST")
+  .required()
+  .asString()}`;
+const dev = env.get("REDIS_DEV_HOST").required().asString();
+const redisHost =
+  env.get("NODE_ENV").required().asString() === "development" ? dev : prod;
 
 export default {
   NODE_ENV: env.get("NODE_ENV").required().asString(),
@@ -21,4 +28,5 @@ export default {
   SMTP_PORT: env.get("SMTP_PORT").required().asPortNumber(),
   SMTP_USER: env.get("SMTP_USER").required().asString(),
   SMTP_PASS: env.get("SMTP_PASS").required().asString(),
+  REDIS_URI: redisHost,
 };

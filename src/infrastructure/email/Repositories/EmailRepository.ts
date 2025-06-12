@@ -4,7 +4,7 @@ import env from "../../../shared/constant/env";
 import { IEmail } from "../models/models";
 
 class EmailRepository implements IEmailRepository {
-  transporter: Transporter;
+  private transporter: Transporter;
   constructor() {
     this.transporter = nodeMailer.createTransport({
       host: env.SMTP_HOST,
