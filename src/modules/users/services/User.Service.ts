@@ -22,6 +22,8 @@ class UserService {
     return ApiResponse.OK({ result });
   }
 
+  async login(){}
+
   async registerUser({
     name,
     email,

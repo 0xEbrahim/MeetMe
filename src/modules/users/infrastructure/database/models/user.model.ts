@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema<IUser>(
     password: {
       type: String,
       required: true,
-      select: false,
+      // select: false,
     },
   },
   {
@@ -32,6 +32,10 @@ userSchema.pre("save", async function (next) {
   this.password = hash;
   next();
 });
+
+userSchema.methods.matchPassword = async function (password: string) {
+  return await bcrypt.compare(password, this.password);
+};
 
 const User: mongoose.Model<IUser, {}> = mongoose.model("User", userSchema);
 
