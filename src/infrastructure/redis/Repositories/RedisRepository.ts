@@ -21,6 +21,10 @@ class RedisRepository implements IRedisRepository {
   async keys(key: string): Promise<string[]> {
     return await this.redis.keys(key);
   }
+  async disconnect(): Promise<void> {
+    await this.redis.flushall();
+    await this.redis.disconnect();
+  }
 }
 
 export default RedisRepository;

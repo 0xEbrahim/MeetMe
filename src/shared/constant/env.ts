@@ -8,7 +8,10 @@ const prod = `redis://${env.get("REDIS_PROD_HOST").required().asString()}:${env
   .asPortNumber()}`;
 const dev = env.get("REDIS_DEV_HOST").required().asString();
 const redisHost =
-  env.get("NODE_ENV").required().asString() === "development" ? dev : prod;
+  env.get("NODE_ENV").required().asString() === "development" ||
+  env.get("NODE_ENV").required().asString() === "testing"
+    ? dev
+    : prod;
 
 export default {
   NODE_ENV: env.get("NODE_ENV").required().asString(),
@@ -20,6 +23,7 @@ export default {
   REFRESH_TOKEN_SECRET: env.get("REFRESH_TOKEN_SECRET").required().asString(),
   MONGO_DB_HOST: env.get("MONGO_DB_HOST").required().asString(),
   MONGO_DB_PORT: env.get("MONGO_DB_PORT").required().asPortNumber(),
+  TESTING_DB_URI: env.get("TESTING_DB_URI").required().asString(),
   ME_USERNAME: env.get("ME_CONFIG_MONGODB_ADMINUSERNAME").required().asString(),
   ME_PASSWORD: env.get("ME_CONFIG_MONGODB_ADMINPASSWORD").required().asString(),
   ME_URI: env.get("ME_CONFIG_MONGODB_URL").required().asString(),
