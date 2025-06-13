@@ -34,9 +34,9 @@ class UserRepository implements IUserRepository {
     await redis.set("users", data, users);
     return users;
   }
-  async findByEmail(email: string): Promise<boolean> {
-    const user = await User.findOne({ email: email });
-    return user !== null;
+  async findByEmail(email: string): Promise<IUser | null> {
+    const user : IUser | null= await User.findOne({ email: email });
+    return user;
   }
   async register({ name, email, password }: IRegisterUser): Promise<IUser> {
     const user: IUser = await User.create({ name, email, password });

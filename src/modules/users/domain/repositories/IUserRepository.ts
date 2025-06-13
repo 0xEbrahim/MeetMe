@@ -5,9 +5,8 @@ import { IUser } from "../models/IUser";
 
 export interface IUserRepository {
   register(data: IRegisterUser): Promise<IUser>;
-  findByEmail(email: string): Promise<boolean>;
+  findByEmail(email: string): Promise<IUser | null>;
   findOne(id: string): Promise<IUser | null>;
   find(data: IFindUsers): Promise<IUser[]>;
-  // update(id: string, data:)
   delete(id: string): Promise<IUser | null>;
 }
