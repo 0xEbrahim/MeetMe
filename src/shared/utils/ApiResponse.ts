@@ -1,4 +1,3 @@
-import { injectable } from "tsyringe";
 import AppError from "../errors/AppError";
 import { IResponse, ResponseMetadata } from "../types/IResponse";
 import { Response } from "express";
@@ -60,19 +59,19 @@ class ApiResponse<T> {
 
   // Errors
   static NotFound = (message: string) => {
-    throw new AppError(message, 404);
+    throw AppError.throw(404, message);
   };
   static BadRequest = (message: string) => {
-    throw new AppError(message, 400);
+    throw AppError.throw(400, message);
   };
   static UnAuthorized = (message: string) => {
-    throw new AppError(message, 401);
+    throw AppError.throw(401, message);
   };
   static Forbidden = (message: string) => {
-    throw new AppError(message, 403);
+    throw AppError.throw(403, message);
   };
   static AlreadyExist = (message: string) => {
-    throw new AppError(message, 409);
+    throw AppError.throw(409, message);
   };
 }
 

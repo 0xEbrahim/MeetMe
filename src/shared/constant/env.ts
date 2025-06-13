@@ -2,19 +2,19 @@ import dotenv from "dotenv";
 import env from "env-var";
 
 dotenv.config();
+
+const node_env = env.get("NODE_ENV").required().asString();
+
 const prod = `redis://${env.get("REDIS_PROD_HOST").required().asString()}:${env
   .get("REDIS_PORT")
   .required()
   .asPortNumber()}`;
 const dev = env.get("REDIS_DEV_HOST").required().asString();
 const redisHost =
-  env.get("NODE_ENV").required().asString() === "development" ||
-  env.get("NODE_ENV").required().asString() === "testing"
-    ? dev
-    : prod;
+  node_env === "development" || node_env === "testing" ? dev : prod;
 
 export default {
-  NODE_ENV: env.get("NODE_ENV").required().asString(),
+  NODE_ENV: node_env,
   DEV_URL: env.get("DEV_URL").required().asString(),
   PORT: env.get("APP_PORT").required().asPortNumber(),
   MONGO_USERNAME: env.get("MONGO_INITDB_ROOT_USERNAME").required().asString(),

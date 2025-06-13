@@ -9,6 +9,11 @@ import "../../shared/container/index";
 import errorHandler from "../../shared/errors/errorHandler";
 const app = express();
 
+/**
+ * Validation
+ */
+
+
 app.set("views", path.join(__dirname, "../../views"));
 app.set("view engine", "ejs");
 app.use(express.json({ limit: "50mb" }));
