@@ -5,7 +5,7 @@ import { IResponse } from "../../../shared/types/IResponse";
 import { IUser } from "../domain/models/IUser";
 import SendEmailService from "../../../infrastructure/email/services/SendEmail.Service";
 import { IEmail } from "../../../infrastructure/email/models/models";
-import { env } from "process";
+import env from "../../../shared/constant/env";
 import { IFindUsers } from "../domain/models/IFindUsers";
 import { IUserRepository } from "../domain/repositories/IUserRepository";
 
@@ -51,7 +51,10 @@ class UserService {
         appUrl: env.DEV_URL,
       },
     };
-    // await SendEmail.exec(emailData);
+    if (env.NODE_ENV !== "testing") {
+      console.log("HOLA")
+      await SendEmail.exec(emailData);
+    }
     return ApiResponse.Created({ user });
   }
 
