@@ -122,3 +122,27 @@ describe("DELETE /:id", () => {
   });
 });
 
+describe("GET /:id", () => {
+  it(`Should return user reponse 200`, async () => {
+    const data = await request(app).post("/api/v1/users/signup").send(userData);
+    const response = await request(app).get(
+      `/api/v1/users/${data.body.data.user._id}`
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.body.status).toBe("SUCCESS");
+    expect(response.body.message).toBe("Operation completed successfully");
+    expect(response.body.data).toHaveProperty("user");
+    expect(response.body.data.user.email).toEqual(userData.email);
+  });
+
+  it("Should return error not found", async () => {
+    const response = await request(app).get(`/api/v1/users/${nonExistUserId}`);
+    expect(response.statusCode).toBe(404);
+    expect(response.body.status).toBe("ERROR");
+    expect(response.body.message).toBe(
+      `User with id: ${nonExistUserId} not found.`
+    );
+  });
+});
+
+
