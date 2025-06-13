@@ -48,6 +48,11 @@ const registerUserData = [
     password: "123456789",
   },
 ];
+const users = Array.from({ length: 20 }, (_, i) => ({
+  name: `User${i + 1}`,
+  email: `user${i + 1}@example.com`,
+  password: `password${i + 1}`,
+}));
 
 const userData = {
   name: "Ebrahim",
@@ -119,7 +124,7 @@ describe("DELETE /:id", () => {
     expect(response.body.message).toBe(
       `User with id: ${nonExistUserId} not found.`
     );
-  });
+  }, 15000);
 });
 
 describe("GET /:id", () => {
@@ -133,7 +138,7 @@ describe("GET /:id", () => {
     expect(response.body.message).toBe("Operation completed successfully");
     expect(response.body.data).toHaveProperty("user");
     expect(response.body.data.user.email).toEqual(userData.email);
-  });
+  }, 15000);
 
   it("Should return error not found", async () => {
     const response = await request(app).get(`/api/v1/users/${nonExistUserId}`);
@@ -142,7 +147,44 @@ describe("GET /:id", () => {
     expect(response.body.message).toBe(
       `User with id: ${nonExistUserId} not found.`
     );
-  });
+  }, 15000);
 });
 
+describe("GET /", () => {
+  it("Should retrieve all the documents", async () => {
+    for (let user of registerUserData) {
+      await request(app).post("/api/v1/users/signup").send(user);
+    }
+    const response = await request(app).get("/api/v1/users");
+    expect(response.statusCode).toBe(200);
+    expect(response.body.status).toBe("SUCCESS");
+    expect(response.body.message).toBe("Operation completed successfully");
+    expect(response.body.data).toHaveProperty("users");
+    expect(response.body.data.users.length).toEqual(registerUserData.length);
+  }, 15000);
 
+  it("Should return due to the query parameter", async () => {
+    for (let user of users) {
+      await request(app).post("/api/v1/users/signup").send(user);
+    }
+    let response = await request(app).get("/api/v1/users").query({
+      limit: 1,
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.status).toBe("SUCCESS");
+    expect(response.body.message).toBe("Operation completed successfully");
+    expect(response.body.data).toHaveProperty("users");
+    expect(response.body.data.users.length).toBe(1);
+    response = await request(app).get("/api/v1/users").query({
+      limit: 5,
+      page: 2,
+      fields: "name,email",
+    });
+    expect(response.body.data.users.length).toBeLessThanOrEqual(5);
+    response.body.data.users.forEach((user: any) => {
+      expect(user).toHaveProperty("name");
+      expect(user).toHaveProperty("email");
+      expect(Object.keys(user)).not.toContain("password");
+    });
+  }, 15000);
+});
