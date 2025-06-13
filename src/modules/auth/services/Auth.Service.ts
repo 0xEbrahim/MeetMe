@@ -6,8 +6,6 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../../../shared/utils/JWT/token";
-import { IResponse } from "../../../shared/types/IResponse";
-import { STATUS } from "../../../shared/constant/responseStatus";
 
 @injectable()
 class AuthService {

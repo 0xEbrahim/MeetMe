@@ -1,4 +1,3 @@
-import { injectable } from "tsyringe";
 import AppError from "../errors/AppError";
 import { IResponse, ResponseMetadata } from "../types/IResponse";
 import { Response } from "express";

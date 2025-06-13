@@ -1,9 +1,8 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
 import { IRequest } from "../types/IRequest";
 import ApiResponse from "../utils/ApiResponse";
-import env from "../constant/env";
 import User from "../../modules/users/infrastructure/database/models/user.model";
 import { IUser } from "../../modules/users/domain/models/IUser";
 import { verfiyAccessToken } from "../utils/JWT/token";
