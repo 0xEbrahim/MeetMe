@@ -29,6 +29,7 @@ class AppError extends Error {
   }
   static fromZod(err: ZodError, statusCode: number = 400) {
     const formattedError = fromZodError(err);
+
     return new AppError(
       statusCode,
       formattedError.message,

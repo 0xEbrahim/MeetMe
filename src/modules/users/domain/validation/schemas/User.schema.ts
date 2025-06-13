@@ -1,6 +1,11 @@
+import mongoose from "mongoose";
 import { z } from "zod";
-import { IRegisterUser } from "../../models/IRegisterUser";
 
+const objectIdSchema = z
+  .string()
+  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "Invalid ObjectId format",
+  });
 export const RegisterBodySchema = z.object({
   name: z
     .string()
@@ -14,9 +19,13 @@ export const RegisterBodySchema = z.object({
   password: z.string().nonempty({ message: "Password is required." }),
 });
 
-export const IFindUserQuery = z.object({
+export const FindUserQuery = z.object({
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(20),
   sort: z.string().optional(),
   limitFields: z.string().optional(),
+});
+
+export const IDParam = z.object({
+  id: objectIdSchema,
 });
