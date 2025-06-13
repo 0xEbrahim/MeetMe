@@ -22,7 +22,7 @@ class UserService {
     return ApiResponse.OK({ result });
   }
 
-  async login(){}
+  async login() {}
 
   async registerUser({
     name,
@@ -47,7 +47,7 @@ class UserService {
         appUrl: env.DEV_URL,
       },
     };
-    await SendEmail.exec(emailData);
+    // await SendEmail.exec(emailData);
     return ApiResponse.Created({ user });
   }
 
