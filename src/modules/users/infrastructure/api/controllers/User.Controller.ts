@@ -4,7 +4,6 @@ import asyncHandler from "../../../../../shared/utils/asyncHandler";
 import ApiResponse from "../../../../../shared/utils/ApiResponse";
 import { IResponse } from "../../../../../shared/types/IResponse";
 import UserService from "../../../services/User.Service";
-import { IRequest } from "../../../../../shared/types/IRequest";
 @injectable()
 export default class UserController {
   public register = asyncHandler(
@@ -21,7 +20,7 @@ export default class UserController {
   );
 
   public findOne = asyncHandler(
-    async (req: IRequest, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response, next: NextFunction) => {
       const userService = container.resolve(UserService);
       const response: IResponse = await userService.findOne(req.params.id);
       ApiResponse.send(response, res);

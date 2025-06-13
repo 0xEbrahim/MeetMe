@@ -52,7 +52,6 @@ class UserService {
       },
     };
     if (env.NODE_ENV !== "testing") {
-      console.log("HOLA")
       await SendEmail.exec(emailData);
     }
     return ApiResponse.Created({ user });
