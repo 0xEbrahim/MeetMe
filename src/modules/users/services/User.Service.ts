@@ -22,7 +22,11 @@ class UserService {
     return ApiResponse.OK({ result });
   }
 
-  async login() {}
+  async findOne(id: string) {
+    const user = await this.UserRepository.findOne(id);
+    if (!user) return ApiResponse.NotFound(`User with id: ${id} not found.`);
+    return ApiResponse.OK({ user });
+  }
 
   async registerUser({
     name,
