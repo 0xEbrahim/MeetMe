@@ -11,11 +11,9 @@ export const generateAccessToken = async (id: string) => {
   });
 };
 
-export const verfiyAccessToken = async (token: string): Promise<jwtPayload> => {
-  return (await jwt.verify(
-    token,
-    env.ACCESS_TOKEN_SECRET
-  )) as Promise<jwtPayload>;
+export const verifyAccessToken = (token: string) => {
+  const dec = jwt.verify(token, env.ACCESS_TOKEN_SECRET);
+  return dec;
 };
 
 export const generateRefreshToken = async (id: string) => {
@@ -24,7 +22,7 @@ export const generateRefreshToken = async (id: string) => {
   });
 };
 
-export const verfiyRefreshToken = async (
+export const verifyRefreshToken = async (
   token: string
 ): Promise<jwtPayload> => {
   return (await jwt.verify(

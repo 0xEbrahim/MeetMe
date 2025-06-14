@@ -58,8 +58,14 @@ class ApiResponse<T> {
   };
 
   // Errors
-  static NotFound = (message: string) => {
-    throw AppError.throw(404, message);
+  static InternalServerError = () => {
+    throw AppError.throw(
+      404,
+      "Server error while processing request, please try again later."
+    );
+  };
+  static NotFound = (type: string, id: string) => {
+    throw AppError.throw(404, `${type} with id: ${id} not found.`);
   };
   static BadRequest = (message: string) => {
     throw AppError.throw(400, message);

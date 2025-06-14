@@ -17,14 +17,14 @@ class UserService {
 
   async deleteUser(id: string) {
     const user = await this.UserRepository.findOne(id);
-    if (!user) return ApiResponse.NotFound(`User with id: ${id} not found.`);
+    if (!user) return ApiResponse.NotFound("User", id);
     const result = await this.UserRepository.delete(id);
     return ApiResponse.OK({ result });
   }
 
   async findOne(id: string) {
     const user = await this.UserRepository.findOne(id);
-    if (!user) return ApiResponse.NotFound(`User with id: ${id} not found.`);
+    if (!user) return ApiResponse.NotFound("User", id);
     return ApiResponse.OK({ user });
   }
 

@@ -23,9 +23,11 @@ class AppError extends Error {
     return new AppError(statusCode, message);
   }
 
-  static from(err: unknown) {
-    if (err instanceof AppError) return err;
+  static from(err: any) {
     if (err instanceof ZodError) return this.fromZod(err);
+    if (err.name === "JsonWebTokenError")
+      return this.throw(401, "Invalid or expired JsonWebToken.");
+    return err;
   }
   static fromZod(err: ZodError, statusCode: number = 400) {
     const formattedError = fromZodError(err);
