@@ -7,9 +7,12 @@ import {
   IDParam,
   RegisterBodySchema,
 } from "../../../domain/validation/schemas/User.schema";
+import RoomController from "../../../../room/infrastructure/api/controllers/room.controller";
+import { roomQuery } from "../../../../room/domain/validation/schemas/room.schema";
 
 const router = express.Router();
 const userController = container.resolve(UserController);
+const roomController = container.resolve(RoomController);
 
 router.post(
   "/signup",
@@ -31,5 +34,11 @@ router.delete(
   validationMiddleware({ params: IDParam }),
   userController.delete
 );
+router.get(
+  "/me/rooms",
+  validationMiddleware({ query: roomQuery }),
+  roomController.findByCreator
+);
+
 
 export const UserRouter = router;

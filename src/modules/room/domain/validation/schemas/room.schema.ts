@@ -55,8 +55,15 @@ export const updateRoomBodySchema = z
     message: "At least one field must be provided for update",
   });
 
-export const RoomByIdParamSchema = z.object({
+export const IdParamSchema = z.object({
   id: objectIdSchema,
+});
+
+export const roomQuery = z.object({
+  page: z.coerce.number().optional().default(1),
+  limit: z.coerce.number().optional().default(20),
+  sort: z.string().optional(),
+  limitFields: z.string().optional(),
 });
 
 export const getRoomByCodeParamsSchema = z.object({
