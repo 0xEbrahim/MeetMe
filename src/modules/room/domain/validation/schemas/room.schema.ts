@@ -25,7 +25,7 @@ export const createRoomBodySchema = z.object({
 });
 
 export const joinRoomBodySchema = z.object({
-  room_code: z
+  code: z
     .string()
     .min(6, "Room code must be at least 6 characters")
     .max(8, "Room code must be at most 8 characters")
@@ -56,10 +56,10 @@ export const updateRoomBodySchema = z
   });
 
 export const RoomByIdParamSchema = z.object({
-  roomId: objectIdSchema,
+  id: objectIdSchema,
 });
 
-export const getRoomByCodeParamSchema = z.object({
+export const getRoomByCodeParamsSchema = z.object({
   code: z
     .string()
     .min(6, "Room code must be at least 6 characters")
@@ -71,4 +71,4 @@ export const getRoomByCodeParamSchema = z.object({
     .trim(),
 });
 
-export const joinRoomParamSchema = getRoomByCodeParamSchema;
+export const joinRoomParamSchema = getRoomByCodeParamsSchema;

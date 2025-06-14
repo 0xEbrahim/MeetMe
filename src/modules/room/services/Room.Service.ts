@@ -1,6 +1,5 @@
 import crypto from "crypto";
 import { inject, injectable } from "tsyringe";
-import RoomRepository from "../infrastructure/database/repositories/RoomRepository";
 import { ICreateRoom } from "../domain/models/ICreateRoom";
 import ApiResponse from "../../../shared/utils/ApiResponse";
 import { IRoom } from "../domain/models/IRoom";
@@ -9,12 +8,12 @@ import { IUpdateRoom } from "../domain/models/IUpdateRoom";
 import { IFindRooms } from "../domain/models/IFindRooms";
 import { IDeleteRoom } from "../domain/models/IDeleteRoom";
 import { IJoinRoom } from "../domain/models/IJoinRoom";
-import { Room_Participant } from "../infrastructure/database/models/room.model";
+import { IRoomRepository } from "../domain/repositories/IRoomRepository";
 
 @injectable()
 class RoomService {
   constructor(
-    @inject("RoomRepository") private readonly RoomRepository: RoomRepository
+    @inject("RoomRepository") private readonly RoomRepository: IRoomRepository
   ) {}
 
   private async _GenerateUniqueRoomCode(): Promise<string> {
