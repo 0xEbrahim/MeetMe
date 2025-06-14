@@ -1,8 +1,9 @@
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 export interface IRoom extends Document {
   name: string;
   room_code: string;
-  isActive: boolean;
+  is_active: boolean;
+  created_by: mongoose.Schema.Types.ObjectId;
   max_participants: number;
 }

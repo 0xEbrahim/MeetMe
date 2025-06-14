@@ -1,32 +1,40 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { IRoom } from "../../../domain/models/IRoom";
 
-/**
- *  TODO:
- *  1 - Continue Auth
- *  2 - Unit testing The User & Auth
- *  3 - Implement rooms
- */
+const roomSchema = new mongoose.Schema<IRoom>(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    room_code: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    max_participants: {
+      type: Number,
+      required: true,
+      default: 10,
+    },
+    created_by: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+    is_active: {
+      type: Boolean,
+      default: true,
+      index: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const roomSchema = new mongoose.Schema<IRoom>({
-  name: {
-    type: String,
-    required: true,
-  },
-  room_code: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true,
-  },
-  max_participants: {
-    type: Number,
-    required: true,
-  },
-  isActive: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const room_participants = new mongoose.Schema({});
+export const Room: mongoose.Model<IRoom, {}> = mongoose.model<IRoom>(
+  "Room",
+  roomSchema
+);
