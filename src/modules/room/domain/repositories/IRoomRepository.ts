@@ -1,6 +1,6 @@
 import { ICreateRoom } from "../models/ICreateRoom";
 import { IFindRooms } from "../models/IFindRooms";
-import { IRoom } from "../models/IRoom";
+import { IRoom, IRoom_Participants } from "../models/IRoom";
 import { IUpdateRoom } from "../models/IUpdateRoom";
 
 export interface IRoomRepository {
@@ -12,4 +12,6 @@ export interface IRoomRepository {
   find(query: IFindRooms): Promise<IRoom[]>;
   delete(id: string): Promise<IRoom | null>;
   update(id: string, data: IUpdateRoom): Promise<IRoom | null>;
+  isRoomParticipant(roomId: string, userId: string): Promise<boolean>;
+  joinRoom(roomId: string, userId: string): Promise<IRoom_Participants>;
 }

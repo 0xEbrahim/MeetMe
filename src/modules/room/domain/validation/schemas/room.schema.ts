@@ -70,3 +70,5 @@ export const getRoomByCodeParamSchema = z.object({
     )
     .trim(),
 });
+
+export const joinRoomParamSchema = getRoomByCodeParamSchema;

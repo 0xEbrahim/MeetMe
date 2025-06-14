@@ -1,14 +1,25 @@
 import ApiFeatures from "../../../../../shared/utils/ApiFeatures";
 import { ICreateRoom } from "../../../domain/models/ICreateRoom";
 import { IFindRooms } from "../../../domain/models/IFindRooms";
-import { IRoom } from "../../../domain/models/IRoom";
+import { IRoom, IRoom_Participants } from "../../../domain/models/IRoom";
 import { IUpdateRoom } from "../../../domain/models/IUpdateRoom";
 import { IRoomRepository } from "../../../domain/repositories/IRoomRepository";
-import { Room } from "../models/room.model";
+import { Room, Room_Participant } from "../models/room.model";
 
 type nullableRoom = IRoom | null;
 
 export class RoomRepository implements IRoomRepository {
+  async joinRoom(roomId: string, userId: string): Promise<IRoom_Participants> {
+    const roomJoined = await Room_Participant.create({ roomId, userId });
+    return roomJoined;
+  }
+  async isRoomParticipant(roomId: string, userId: string): Promise<boolean> {
+    const isPart = await Room_Participant.findOne({
+      roomId: roomId,
+      userId: userId,
+    });
+    return isPart !== null;
+  }
   async findByCode(code: string): Promise<IRoom | null> {
     const room: nullableRoom = await Room.findOne({ room_code: code });
     return room;
