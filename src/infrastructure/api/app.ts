@@ -17,7 +17,7 @@ app.use(morgan(env.NODE_ENV === "development" ? "dev" : "combined"));
 app.use(cors());
 app.use("/api/v1", routes);
 app.use(errorHandler);
-app.all("*", (req, res, next) => {
+app.all(/(.*)/, (req, res, next) => {
   res
     .status(404)
     .json({ status: "ERROR", message: `${req.originalUrl} not found` });

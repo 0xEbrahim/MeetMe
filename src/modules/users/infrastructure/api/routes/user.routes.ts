@@ -9,6 +9,7 @@ import {
 } from "../../../domain/validation/schemas/User.schema";
 import RoomController from "../../../../room/infrastructure/api/controllers/room.controller";
 import { roomQuery } from "../../../../room/domain/validation/schemas/room.schema";
+import isAuthenticated from "../../../../../shared/middleware/isAuthenticated";
 
 const router = express.Router();
 const userController = container.resolve(UserController);
@@ -25,6 +26,12 @@ router.get(
   userController.find
 );
 router.get(
+  "/me/rooms",
+  isAuthenticated,
+  validationMiddleware({ query: roomQuery }),
+  roomController.findByCreator
+);
+router.get(
   "/:id",
   validationMiddleware({ params: IDParam }),
   userController.findOne
@@ -34,11 +41,5 @@ router.delete(
   validationMiddleware({ params: IDParam }),
   userController.delete
 );
-router.get(
-  "/me/rooms",
-  validationMiddleware({ query: roomQuery }),
-  roomController.findByCreator
-);
-
 
 export const UserRouter = router;

@@ -39,10 +39,6 @@ const roomSchema = new mongoose.Schema<IRoom>(
   }
 );
 
-export const Room: mongoose.Model<IRoom, {}> = mongoose.model<IRoom>(
-  "Room",
-  roomSchema
-);
 const RoomParticipant = new mongoose.Schema<IRoom_Participants>(
   {
     userId: {
@@ -63,9 +59,38 @@ const RoomParticipant = new mongoose.Schema<IRoom_Participants>(
   { timestamps: true }
 );
 
-RoomParticipant.index({ roomId: 1, userId: 1 }, { unique: true });
+roomSchema.statics.deleteRelatedDocs = async function (roomId: string) {
+  await Room_Participant.deleteMany({ roomId: roomId });
+};
 
-export const Room_Participant: Model<IRoom_Participants, {}> = mongoose.model(
-  "Room_Part",
-  RoomParticipant
-);
+roomSchema.post(/^findOneAndD/, async function (doc) {
+  await doc.constructor.deleteRelatedDocs(doc.id.toString());
+});
+
+export const Room = mongoose.model<IRoom>("Room", roomSchema);
+
+RoomParticipant.index({ roomId: 1, userId: 1 }, { unique: true });
+RoomParticipant.index({ roomId: 1 });
+RoomParticipant.index({ userId: 1 });
+interface IRoomParticipantModel extends Model<IRoom_Participants> {
+  calcRoomParticipate(roomId: string): Promise<void>;
+}
+RoomParticipant.statics.calcRoomParticipate = async function (roomId: string) {
+  const count = await this.countDocuments({ roomId });
+  await Room.findByIdAndUpdate(roomId, {
+    participants_number: count,
+  });
+};
+
+RoomParticipant.post("save", async function () {
+  await (this.constructor as IRoomParticipantModel).calcRoomParticipate(
+    this.roomId.toString()
+  );
+});
+RoomParticipant.post(/^findOneAnd/, async function (doc) {
+  await doc.constructor.calcRoomParticipate(doc.roomId.toString());
+});
+export const Room_Participant = mongoose.model<
+  IRoom_Participants,
+  IRoomParticipantModel
+>("Room_Part", RoomParticipant);
