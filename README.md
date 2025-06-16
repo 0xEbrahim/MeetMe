@@ -2,7 +2,7 @@
 
 MeetMe is a modern, scalable video conferencing platform built with Node.js, TypeScript, and Express. It provides real-time video communication capabilities similar to Google Meet, with additional features for user management, meeting scheduling, and collaboration.
 
-## 🌟 Key Features
+##  Key Features
 
 ### Core Features
 
@@ -31,37 +31,6 @@ MeetMe is a modern, scalable video conferencing platform built with Node.js, Typ
 - Clean Architecture principles
 - Dependency Injection with TSyringe
 
-## 🏗️ Architecture
-
-### Project Structure
-
-```
-src/
-├── application/          # Application business logic
-│   ├── services/        # Business services
-│   └── use-cases/       # Use case implementations
-├── domain/              # Domain models and interfaces
-│   ├── entities/        # Domain entities
-│   ├── repositories/    # Repository interfaces
-│   └── value-objects/   # Value objects
-├── infrastructure/      # External services and implementations
-│   ├── api/            # Express routes and controllers
-│   │   ├── controllers/ # Request handlers
-│   │   ├── middlewares/ # Custom middlewares
-│   │   └── routes/     # API routes
-│   ├── database/       # Database configurations
-│   │   ├── models/     # Mongoose models
-│   │   └── repositories/ # Repository implementations
-│   └── services/       # External service integrations
-│       ├── email/      # Email service
-│       ├── redis/      # Redis service
-│       └── websocket/  # WebSocket service
-└── shared/             # Shared utilities and helpers
-    ├── config/         # Configuration files
-    ├── errors/         # Custom error classes
-    ├── types/          # TypeScript types
-    └── utils/          # Utility functions
-```
 
 ### Technology Stack
 
@@ -99,7 +68,7 @@ src/
 1. **Clone the Repository**
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/0xEbrahim/MeetMe
 cd meetme
 ```
 
@@ -140,14 +109,6 @@ SMTP_PORT=587
 SMTP_USER=your_email
 SMTP_PASS=your_password
 SMTP_FROM=MeetMe <noreply@meetme.com>
-
-# WebSocket Configuration
-WS_PORT=4001
-WS_PATH=/ws
-
-# Meeting Configuration
-MAX_PARTICIPANTS=50
-MEETING_DURATION_LIMIT=1440 # minutes
 ```
 
 ## 🏃‍♂️ Running the Application
@@ -199,7 +160,7 @@ npm test -- path/to/test/file.test.ts
 
 ```
 
-## 📦 Docker Configuration
+##  Docker Configuration
 
 ### Services
 
@@ -226,7 +187,7 @@ npm test -- path/to/test/file.test.ts
 - XSS protection
 - CSRF protection
 
-## 📈 Performance Optimizations
+##  Performance Optimizations
 
 - Redis caching
 - Database indexing
@@ -237,34 +198,11 @@ npm test -- path/to/test/file.test.ts
 - TypeScript for better code quality
 - Lazy loading where applicable
 
-## 🔍 API Documentation
-
-### Authentication Endpoints
-
-- POST `/api/v1/auth/register` - User registration
-- POST `/api/v1/auth/login` - User login
-- POST `/api/v1/auth/refresh` - Refresh token
-- POST `/api/v1/auth/logout` - User logout
-
-### Meeting Endpoints
-
-- POST `/api/v1/meetings` - Create meeting
-- GET `/api/v1/meetings` - List meetings
-- GET `/api/v1/meetings/:id` - Get meeting details
-- PUT `/api/v1/meetings/:id` - Update meeting
-- DELETE `/api/v1/meetings/:id` - Delete meeting
-
-### User Endpoints
-
-- GET `/api/v1/users/profile` - Get user profile
-- PUT `/api/v1/users/profile` - Update user profile
-- GET `/api/v1/users/meetings` - Get user's meetings
-
-## 📝 License
+##  License
 
 This project is licensed under the ISC License.
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -302,7 +240,7 @@ For support, please:
 - Contact the development team
 - Check the documentation
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - List any third-party libraries or tools used
 - Credit any inspiration or resources
