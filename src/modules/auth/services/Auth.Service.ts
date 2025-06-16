@@ -29,7 +29,7 @@ class AuthService {
   async refreshToken({ token }: IRefreshToken): Promise<IResponse> {
     if (!token) {
       return ApiResponse.UnAuthorized(
-        "Session timed out, plwase login again then try."
+        "Session timed out, please login again then try."
       );
     }
     const decoded: jwtPayload = verifyRefreshToken(token) as jwtPayload;
