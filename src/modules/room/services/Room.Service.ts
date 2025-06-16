@@ -138,7 +138,7 @@ class RoomService {
       room.id.toString(),
       userId.toString()
     );
-    return ApiResponse.Created({ roomJoined });
+    return ApiResponse.Created({ room: roomJoined });
   }
 }
 export default RoomService;

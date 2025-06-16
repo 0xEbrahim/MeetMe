@@ -21,8 +21,12 @@ class RedisRepository implements IRedisRepository {
   async keys(key: string): Promise<string[]> {
     return await this.redis.keys(key);
   }
+
+  async flush(): Promise<void> {
+    await this.redis.flushdb();
+  }
+
   async disconnect(): Promise<void> {
-    await this.redis.flushall();
     await this.redis.disconnect();
   }
 }
