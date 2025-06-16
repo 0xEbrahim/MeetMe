@@ -8,6 +8,7 @@ import { IEmail } from "../../../infrastructure/email/models/models";
 import env from "../../../shared/constant/env";
 import { IFindUsers } from "../domain/models/IFindUsers";
 import { IUserRepository } from "../domain/repositories/IUserRepository";
+import RedisService from "../../../infrastructure/redis/Services/Redis.Service";
 
 @injectable()
 class UserService {
@@ -15,10 +16,16 @@ class UserService {
     @inject("UserRepository") private readonly UserRepository: IUserRepository
   ) {}
 
+  private async _INVALIDATE_CACHE() {
+    const redis = container.resolve(RedisService);
+    await redis.delete("users", "*");
+  }
+
   async deleteUser(id: string) {
     const user = await this.UserRepository.findOne(id);
     if (!user) return ApiResponse.NotFound("User", id);
     const result = await this.UserRepository.delete(id);
+    await this._INVALIDATE_CACHE();
     return ApiResponse.OK({ result });
   }
 
@@ -54,11 +61,19 @@ class UserService {
     if (env.NODE_ENV !== "testing") {
       await SendEmail.exec(emailData);
     }
+    await this._INVALIDATE_CACHE();
     return ApiResponse.Created({ user });
   }
 
   async findUsers(data: IFindUsers) {
+    const redis = container.resolve(RedisService);
+    const cachedData = await redis.get("users", data);
+    if (cachedData) {
+      const dataObj = JSON.parse(cachedData);
+      return ApiResponse.OK({ dataObj });
+    }
     const users = await this.UserRepository.find(data);
+    await redis.set("users", data, users);
     return ApiResponse.OK({ users });
   }
 }

@@ -22,6 +22,7 @@ router.post(
 );
 router.get(
   "/",
+  isAuthenticated,
   validationMiddleware({ query: FindUserQuery }),
   userController.find
 );
@@ -33,11 +34,13 @@ router.get(
 );
 router.get(
   "/:id",
+  isAuthenticated,
   validationMiddleware({ params: IDParam }),
   userController.findOne
 );
 router.delete(
   "/:id",
+  isAuthenticated,
   validationMiddleware({ params: IDParam }),
   userController.delete
 );
