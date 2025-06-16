@@ -255,9 +255,8 @@ describe("DELETE /:id", () => {
   });
   it("Should throw not found error", async () => {
     const response = await request(app)
-      .put(`/api/v1/rooms/${invalidRoomId}`)
-      .set("authorization", validJWT)
-      .send({ name: "Bro is broo" });
+      .delete(`/api/v1/rooms/${invalidRoomId}`)
+      .set("authorization", validJWT);
     expect(response.statusCode).toBe(404);
   });
 });
