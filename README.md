@@ -46,7 +46,7 @@ MeetMe is a modern, scalable video conferencing platform built with Node.js, Typ
 - **Logging**: Morgan
 - **Real-time**: WebSocket
 
-## 📋 Prerequisites
+##  Prerequisites
 
 ### System Requirements
 
