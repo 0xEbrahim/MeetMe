@@ -63,7 +63,7 @@ MeetMe is a modern, scalable video conferencing platform built with Node.js, Typ
 - MongoDB Compass (optional)
 - Redis Commander (optional)
 
-## 🛠️ Installation
+##  Installation
 
 1. **Clone the Repository**
 
@@ -111,7 +111,7 @@ SMTP_PASS=your_password
 SMTP_FROM=MeetMe <noreply@meetme.com>
 ```
 
-## 🏃‍♂️ Running the Application
+##  Running the Application
 
 ### Development Mode
 
@@ -142,7 +142,7 @@ npm run build
 npm start
 ```
 
-## 🧪 Testing
+##  Testing
 
 ### Running Tests
 
