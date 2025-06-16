@@ -12,5 +12,6 @@ router.post(
   validationMiddleware({ body: LoginBodySchema }),
   authController.login
 );
+router.post("/refresh", authController.refresh);
 
 export const AuthRouter = router;

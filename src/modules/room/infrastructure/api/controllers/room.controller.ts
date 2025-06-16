@@ -9,7 +9,6 @@ import ApiResponse from "../../../../../shared/utils/ApiResponse";
 class RoomController {
   createRoom = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-      console.log("Controlled");
       const roomService = container.resolve(RoomService);
       const result: IResponse = await roomService.createRoom({
         name: req.body.name,

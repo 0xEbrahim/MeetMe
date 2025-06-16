@@ -17,6 +17,7 @@ beforeAll(async () => {
 
 afterEach(async () => {
   const collections = await mongoose.connection.db!.collections();
+  await redisRepo.flush();
   for (const collection of collections) {
     await collection.deleteMany({});
   }
@@ -24,6 +25,7 @@ afterEach(async () => {
 afterAll(async () => {
   await mongoose.disconnect();
   await mongoServer.stop();
+  await redisRepo.flush();
   await redisRepo.disconnect();
 });
 
@@ -43,7 +45,7 @@ describe("POST /login", () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.status).toBe("SUCCESS");
     expect(response.body.message).toBe("Operation completed successfully");
-    expect(response.body.data).toHaveProperty("accessToken");
+    expect(response.body).toHaveProperty("token");
     expect(response.body.data).toHaveProperty("user");
   });
 

@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { inject, injectable } from "tsyringe";
+import { container, inject, injectable } from "tsyringe";
 import { ICreateRoom } from "../domain/models/ICreateRoom";
 import ApiResponse from "../../../shared/utils/ApiResponse";
 import { IRoom } from "../domain/models/IRoom";
@@ -9,12 +9,20 @@ import { IFindRooms } from "../domain/models/IFindRooms";
 import { IDeleteRoom } from "../domain/models/IDeleteRoom";
 import { IJoinRoom } from "../domain/models/IJoinRoom";
 import { IRoomRepository } from "../domain/repositories/IRoomRepository";
+import RedisService from "../../../infrastructure/redis/Services/Redis.Service";
 
 @injectable()
 class RoomService {
   constructor(
     @inject("RoomRepository") private readonly RoomRepository: IRoomRepository
   ) {}
+
+  private async _INVALIDATE_CACHE() {
+    const redis = container.resolve(RedisService);
+    await redis.delete("rooms", "*");
+    await redis.delete("rooms:user", "*");
+    await redis.delete("rooms:active", "*");
+  }
 
   private async _GenerateUniqueRoomCode(): Promise<string> {
     let code: string;
@@ -41,6 +49,7 @@ class RoomService {
       max_participants,
     });
     if (!room) return ApiResponse.InternalServerError();
+    await this._INVALIDATE_CACHE();
     return ApiResponse.Created({ room });
   }
 
@@ -50,7 +59,14 @@ class RoomService {
     return ApiResponse.OK({ room });
   }
   async getRooms(query: IFindRooms): Promise<IResponse> {
+    const redis = container.resolve(RedisService);
+    let cachedData = await redis.get("rooms", query);
+    if (cachedData) {
+      cachedData = JSON.parse(cachedData);
+      return ApiResponse.OK({ rooms: cachedData });
+    }
     const rooms = await this.RoomRepository.find(query);
+    await redis.set("rooms", query, rooms);
     return ApiResponse.OK({ rooms });
   }
 
@@ -60,11 +76,25 @@ class RoomService {
     return ApiResponse.OK({ room });
   }
   async getUserRooms(userId: string, query: IFindRooms): Promise<IResponse> {
+    const redis = container.resolve(RedisService);
+    let cachedData = await redis.get("rooms:user", query);
+    if (cachedData) {
+      cachedData = JSON.parse(cachedData);
+      return ApiResponse.OK({ rooms: cachedData });
+    }
     const rooms = await this.RoomRepository.findByCreator(userId, query);
+    await redis.set("rooms:user", query, rooms);
     return ApiResponse.OK({ rooms });
   }
   async getActiveRooms(query: IFindRooms): Promise<IResponse> {
+    const redis = container.resolve(RedisService);
+    let cachedData = await redis.get("rooms:active", query);
+    if (cachedData) {
+      cachedData = JSON.parse(cachedData);
+      return ApiResponse.OK({ rooms: cachedData });
+    }
     const rooms = await this.RoomRepository.findActive(query);
+    await redis.set("rooms:active", query, rooms);
     return ApiResponse.OK({ rooms });
   }
 
@@ -75,6 +105,7 @@ class RoomService {
       return ApiResponse.Forbidden("Only room creator can perform this action");
     room = await this.RoomRepository.update(id, data);
     if (!room) return ApiResponse.NotFound("Room", id);
+    await this._INVALIDATE_CACHE();
     return ApiResponse.OK({ room });
   }
 
@@ -84,6 +115,7 @@ class RoomService {
     if (room.created_by.toString() !== data.userId.toString())
       return ApiResponse.Forbidden("Only room creator can perform this action");
     await this.RoomRepository.delete(data.id);
+    await this._INVALIDATE_CACHE();
     return ApiResponse.OK({ room });
   }
 
@@ -106,7 +138,7 @@ class RoomService {
       room.id.toString(),
       userId.toString()
     );
-    return ApiResponse.Created({ roomJoined });
+    return ApiResponse.Created({ room: roomJoined });
   }
 }
 export default RoomService;
