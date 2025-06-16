@@ -70,7 +70,7 @@ class UserService {
     const cachedData = await redis.get("users", data);
     if (cachedData) {
       const dataObj = JSON.parse(cachedData);
-      return ApiResponse.OK({ dataObj });
+      return ApiResponse.OK({ users: dataObj });
     }
     const users = await this.UserRepository.find(data);
     await redis.set("users", data, users);

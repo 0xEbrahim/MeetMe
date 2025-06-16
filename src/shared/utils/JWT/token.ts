@@ -1,9 +1,5 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import env from "../../constant/env";
-
-interface jwtPayload extends JwtPayload {
-  id: string;
-}
 
 export const generateAccessToken = async (id: string) => {
   return await jwt.sign({ id }, env.ACCESS_TOKEN_SECRET, {
@@ -22,11 +18,7 @@ export const generateRefreshToken = async (id: string) => {
   });
 };
 
-export const verifyRefreshToken = async (
-  token: string
-): Promise<jwtPayload> => {
-  return (await jwt.verify(
-    token,
-    env.REFRESH_TOKEN_SECRET
-  )) as Promise<jwtPayload>;
+export const verifyRefreshToken = (token: string) => {
+  const dec = jwt.verify(token, env.REFRESH_TOKEN_SECRET);
+  return dec;
 };

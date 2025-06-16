@@ -5,10 +5,9 @@ import ApiResponse from "../utils/ApiResponse";
 import User from "../../modules/users/infrastructure/database/models/user.model";
 import { IUser } from "../../modules/users/domain/models/IUser";
 import { verifyAccessToken } from "../utils/JWT/token";
+import { jwtPayload } from "../types/jwtPayload";
 
-interface jwtPayload extends JwtPayload {
-  id: string;
-}
+
 
 export default asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

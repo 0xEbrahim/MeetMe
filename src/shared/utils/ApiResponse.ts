@@ -3,12 +3,13 @@ import { IResponse, ResponseMetadata } from "../types/IResponse";
 import { Response } from "express";
 import { STATUS } from "../constant/responseStatus";
 
-class ApiResponse<T> {
+class ApiResponse {
   static format = <T extends object | undefined>(
     data: T,
     message?: string,
     statusCode: number = 200,
-    metadata?: ResponseMetadata
+    token?: string,
+    refreshToken?: string
   ) => {
     const response: IResponse = {
       status: STATUS.SUCCESS,
@@ -18,33 +19,25 @@ class ApiResponse<T> {
     if (data) {
       response.data = data;
     }
-    if (metadata) {
-      const meta: ResponseMetadata = {
-        timestamp: new Date().toISOString(),
-        ...metadata,
-      };
-      response.data = {
-        ...response.data,
-        metadata: meta,
-      };
-    }
+    if (token) response.token = token;
+    if (refreshToken) response.refreshToken = refreshToken;
     return response;
   };
 
   static Created = <T extends object | undefined>(
     data: T,
-    message?: string,
-    metadata?: ResponseMetadata
+    message?: string
   ): IResponse => {
-    return this.format(data, message, 201, metadata);
+    return this.format(data, message, 201);
   };
 
   static OK = <T extends object | undefined>(
     data: T,
-    message?: string,
-    metadata?: ResponseMetadata
+    token?: string,
+    refreshToken?: string,
+    message?: string
   ): IResponse => {
-    return this.format(data, message, 200, metadata);
+    return this.format(data, message, 200, token, refreshToken);
   };
 
   static send = (response: IResponse, res: Response) => {
